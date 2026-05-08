@@ -1,15 +1,31 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 export default function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState(false)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
+  const rafRef = useRef<number | null>(null)
+  const positionRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
+    // Detecta se é dispositivo touch — se for, não renderiza o cursor customizado
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    setIsTouchDevice(isTouch)
+    if (isTouch) return
+
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
+      positionRef.current = { x: e.clientX, y: e.clientY }
+      
+      // Usa requestAnimationFrame para limitar updates e melhorar performance
+      if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(() => {
+          setMousePosition({ ...positionRef.current })
+          rafRef.current = null
+        })
+      }
     }
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -29,28 +45,36 @@ export default function CustomCursor() {
       }
     }
 
-    window.addEventListener('mousemove', updateMousePosition)
-    window.addEventListener('mouseover', handleMouseOver)
+    window.addEventListener('mousemove', updateMousePosition, { passive: true })
+    window.addEventListener('mouseover', handleMouseOver, { passive: true })
 
     return () => {
       window.removeEventListener('mousemove', updateMousePosition)
       window.removeEventListener('mouseover', handleMouseOver)
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+      }
     }
   }, [])
 
-  // Desativa o cursor padrão e esconde em telas pequenas (mobile)
+  // Desativa o cursor padrão apenas em desktop
   useEffect(() => {
+    if (isTouchDevice) return
     document.body.style.cursor = 'none'
     return () => {
       document.body.style.cursor = 'auto'
     }
-  }, [])
+  }, [isTouchDevice])
+
+  // Não renderiza nada em dispositivos touch
+  if (isTouchDevice) return null
 
   return (
     <>
       {/* Ponto central pequeno */}
       <motion.div
         className="fixed top-0 left-0 w-3 h-3 bg-champagne rounded-full pointer-events-none z-[9999] hidden md:block"
+        style={{ willChange: 'transform' }}
         animate={{
           x: mousePosition.x - 6,
           y: mousePosition.y - 6,
@@ -61,7 +85,8 @@ export default function CustomCursor() {
       
       {/* Círculo externo que segue mais suavemente */}
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border border-champagne rounded-full pointer-events-none z-[9998] hidden md:flex items-center justify-center bg-champagne/10 backdrop-blur-[1px]"
+        className="fixed top-0 left-0 w-10 h-10 border border-champagne rounded-full pointer-events-none z-[9998] hidden md:flex items-center justify-center"
+        style={{ willChange: 'transform' }}
         animate={{
           x: mousePosition.x - 20,
           y: mousePosition.y - 20,

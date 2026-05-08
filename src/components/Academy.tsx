@@ -103,9 +103,9 @@ export default function Academy() {
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ duration: 1, delay: 1.2 }}
-              className="pt-8"
+              className="pt-16 flex justify-end"
             >
-              <a href="#academy-contact" className="premium-button inline-block">
+              <a href="#academy-contact" className="premium-button text-base px-12 py-5 tracking-[0.2em] w-full sm:w-auto">
                 Quero me Inscrever
               </a>
             </motion.div>

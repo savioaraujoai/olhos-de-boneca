@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
+
 import MagneticButton from './MagneticButton'
 
 export default function Header() {
@@ -29,22 +29,10 @@ export default function Header() {
       <header
         className={`absolute top-0 left-0 w-full z-50 transition-all duration-500 bg-transparent py-6`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo */}
-          <a href="#" className="z-50 flex items-center justify-center -ml-12 md:-ml-24">
-            <div className="relative w-[380px] md:w-[550px] h-[100px] md:h-[160px]">
-              <Image
-                src="/logo.png"
-                alt="Olhos de Boneca Logo"
-                fill
-                className="object-contain brightness-[1.8] saturate-150 drop-shadow-[0_0_10px_rgba(238,203,169,0.3)]"
-                priority
-              />
-            </div>
-          </a>
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-center">
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8 -mr-8 md:-mr-24 z-50">
+          <nav className="hidden md:flex items-center gap-8 z-50">
             <ul className="flex gap-8">
               {navLinks.map((link) => (
                 <li key={link.name}>

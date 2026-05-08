@@ -32,7 +32,7 @@ export default function AboutBrand() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-deep-black/40 via-transparent to-transparent" />
             </div>
-            
+
             {/* Decorative element */}
             <div className="absolute -bottom-6 -right-6 w-48 h-48 border border-champagne/20 rounded-2xl pointer-events-none" />
             <div className="absolute -top-6 -left-6 w-32 h-32 border border-champagne/10 rounded-full pointer-events-none" />
@@ -56,15 +56,15 @@ export default function AboutBrand() {
 
             <div className="space-y-6 text-nude-rose/90 font-light leading-relaxed">
               <p>
-                No Olhos de Boneca Curitiba, não apenas aplicamos cílios — criamos experiências 
+                No Olhos de Boneca Curitiba, não apenas aplicamos cílios — criamos experiências
                 de transformação que elevam sua autoestima e realçam sua beleza única.
               </p>
               <p>
-                Combinamos técnicas exclusivas, produtos premium e um olhar apurado para design 
+                Combinamos técnicas exclusivas, produtos premium e um olhar apurado para design
                 para entregar resultados que são verdadeiras obras de arte em seus olhos.
               </p>
               <p>
-                Somos referência em Curitiba pela nossa precisão técnica, atendimento personalizado 
+                Somos referência em Curitiba pela nossa precisão técnica, atendimento personalizado
                 e compromisso inabalável com a excelência.
               </p>
             </div>
@@ -86,11 +86,13 @@ export default function AboutBrand() {
               </div>
             </div>
 
-            <MagneticButton>
-              <a href="#contact" className="premium-button inline-block mt-8">
-                Agendar Consultoria
-              </a>
-            </MagneticButton>
+            <div className="flex justify-end mt-16">
+              <MagneticButton>
+                <a href="#contact" className="premium-button text-base px-12 py-5 tracking-[0.2em] w-full sm:w-auto">
+                  Agendar Consultoria
+                </a>
+              </MagneticButton>
+            </div>
           </motion.div>
         </div>
       </div>

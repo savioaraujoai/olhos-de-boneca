@@ -10,3 +10,6 @@ yarn-debug.log*
 yarn-error.log*
 .idea
 .vscode
+*.mp4
+!public/*.mp4
+tsconfig.tsbuildinfo

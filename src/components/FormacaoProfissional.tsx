@@ -71,7 +71,7 @@ function Slide({ slide, index, total }: { slide: any; index: number; total: numb
         <div className="absolute top-0 right-0 w-8 md:w-12 h-8 md:h-12 border-t-[1.5px] border-r-[1.5px] border-champagne transition-all duration-500 group-hover:scale-110 origin-top-right" />
         <div className="absolute bottom-0 left-0 w-8 md:w-12 h-8 md:h-12 border-b-[1.5px] border-l-[1.5px] border-champagne transition-all duration-500 group-hover:scale-110 origin-bottom-left" />
         <div className="absolute bottom-0 right-0 w-8 md:w-12 h-8 md:h-12 border-b-[1.5px] border-r-[1.5px] border-champagne transition-all duration-500 group-hover:scale-110 origin-bottom-right" />
-        
+
         {/* Linha Fina Interna */}
         <div className="absolute inset-2 md:inset-3 border border-champagne/5 pointer-events-none" />
 
@@ -103,16 +103,18 @@ function Slide({ slide, index, total }: { slide: any; index: number; total: numb
             {slide.desc}
           </p>
           {index === total - 1 && (
-            <MagneticButton className="mt-8">
-              <a
-                href="https://wa.me/5541999999999"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="premium-button"
-              >
-                Quero me formar
-              </a>
-            </MagneticButton>
+            <div className="flex justify-end mt-24">
+              <MagneticButton>
+                <a
+                  href="https://wa.me/5541999999999"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="premium-button text-base px-12 py-5 tracking-[0.2em] w-full sm:w-auto"
+                >
+                  Quero me formar
+                </a>
+              </MagneticButton>
+            </div>
           )}
         </div>
       </div>
