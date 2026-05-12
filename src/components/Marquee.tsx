@@ -17,29 +17,14 @@ export default function Marquee() {
   )
 
   return (
-    <div className="relative w-full z-20 -mt-8 sm:-mt-12 md:-mt-16">
-      <div className="w-full bg-champagne py-4 md:py-5 overflow-hidden flex whitespace-nowrap border-y border-white/20 shadow-2xl" style={{ transform: 'rotate(-2deg) scale(1.05)' }}>
-        <motion.div
-          animate={{ x: [0, "-50%"] }}
-          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-          className="flex"
-        >
-          <div className="flex">{[...Array(4)].map((_, i) => <div key={`a-${i}`}>{content}</div>)}</div>
-          <div className="flex">{[...Array(4)].map((_, i) => <div key={`b-${i}`}>{content}</div>)}</div>
-        </motion.div>
-      </div>
-
-      {/* Scroll Indicator */}
+    <div className="w-full bg-champagne py-4 md:py-5 overflow-hidden flex whitespace-nowrap relative z-20 border-y border-white/20 shadow-2xl" style={{ transform: 'rotate(-2deg) scale(1.05)' }}>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="absolute -bottom-24 md:-bottom-32 left-1/2 -translate-x-1/2"
+        animate={{ x: [0, "-50%"] }}
+        transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+        className="flex"
       >
-        <div className="scroll-indicator flex flex-col items-center gap-2">
-          <span className="text-champagne/60 text-[10px] md:text-xs uppercase tracking-widest">Scroll</span>
-          <div className="w-px h-10 md:h-16 bg-gradient-to-b from-champagne/60 to-transparent" />
-        </div>
+        <div className="flex">{[...Array(4)].map((_, i) => <div key={`a-${i}`}>{content}</div>)}</div>
+        <div className="flex">{[...Array(4)].map((_, i) => <div key={`b-${i}`}>{content}</div>)}</div>
       </motion.div>
     </div>
   )
