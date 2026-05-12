@@ -10,6 +10,7 @@ import Testimonials from '@/components/Testimonials'
 import FinalCTA from '@/components/FinalCTA'
 import LocationMap from '@/components/LocationMap'
 import Footer from '@/components/Footer'
+import SectionSeparator from '@/components/SectionSeparator'
 
 export default function Home() {
   return (
@@ -17,11 +18,17 @@ export default function Home() {
       <Hero />
       <Marquee />
       <ScrollStorytelling />
+      <SectionSeparator />
       <Services />
+      <SectionSeparator />
       <AboutBrand />
+      <SectionSeparator />
       <Academy />
+      <SectionSeparator />
       <FormacaoProfissional />
+      <SectionSeparator />
       <Certificacoes />
+      <SectionSeparator />
       <Testimonials />
       <FinalCTA />
       <LocationMap />

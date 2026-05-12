@@ -9,7 +9,7 @@ export default function FinalCTA() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section className="relative py-48 overflow-hidden">
+    <section className="relative pt-16 pb-32 md:pb-48 overflow-hidden">
       {/* Background with subtle animation */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-deep-black/95 to-deep-black" />
