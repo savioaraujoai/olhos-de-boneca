@@ -9,13 +9,16 @@ module.exports = {
     extend: {
       colors: {
         'deep-black': '#0A0A0A',
+        'deep-night': '#050505',
+        'wine-cinema': '#1A0505',
         'champagne': '#D6B47C',
         'nude-rose': '#E7D7D0',
         'ice-white': '#F8F7F5',
+        'soft-glow': '#F8F7F5',
       },
       fontFamily: {
-        'editorial': ['Playfair Display', 'Bodoni Moda', 'serif'],
-        'body': ['Inter', 'Satoshi', 'sans-serif'],
+        'editorial': ['Playfair Display', 'serif'],
+        'body': ['Inter', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 1.5s ease-out',

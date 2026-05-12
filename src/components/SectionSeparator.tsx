@@ -1,9 +1,13 @@
 export default function SectionSeparator() {
   return (
-    <div className="w-full flex justify-center items-center py-12 md:py-16 bg-deep-black opacity-80">
-      <div className="w-[30%] max-w-[250px] h-px bg-gradient-to-r from-transparent to-champagne/40" />
-      <div className="w-1.5 h-1.5 rounded-full bg-champagne/60 mx-4 shadow-[0_0_8px_rgba(235,213,186,0.4)]" />
-      <div className="w-[30%] max-w-[250px] h-px bg-gradient-to-l from-transparent to-champagne/40" />
+    <div className="section-breathing relative w-full overflow-hidden pointer-events-none">
+      {/* Visual Silence Transition */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-[80vw] h-[1px] bg-gradient-to-r from-transparent via-white/[0.02] to-transparent" />
+      </div>
+      
+      {/* Soft Fog Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[400px] bg-wine-cinema/[0.03] blur-[150px]" />
     </div>
   )
 }

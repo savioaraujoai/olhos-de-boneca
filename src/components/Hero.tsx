@@ -1,153 +1,153 @@
 'use client'
 
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { gsap } from 'gsap'
 import MagneticButton from './MagneticButton'
 
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const ref = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"]
-  })
-  
-  // Parallax reduzido no mobile para melhor performance
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", isMobile ? "15%" : "40%"])
-
-  // Detecta mobile e otimiza vídeo
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  // Otimização: pausa o vídeo quando não está visível (Intersection Observer)
-  const handleVideoVisibility = useCallback(() => {
-    if (!videoRef.current) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          videoRef.current?.play()
-        } else {
-          videoRef.current?.pause()
-        }
-      },
-      { threshold: 0.1 }
-    )
-    observer.observe(videoRef.current)
-    return () => observer.disconnect()
-  }, [])
+  const titleLinesRef = useRef<(HTMLSpanElement | null)[]>([])
+  const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const cleanup = handleVideoVisibility()
-    return cleanup
-  }, [handleVideoVisibility])
+    const ctx = gsap.context(() => {
+      // 1. Revelação inicial (Voltando para a cadência original)
+      gsap.to(containerRef.current, {
+        opacity: 1,
+        duration: 1.5,
+        ease: 'power2.inOut'
+      })
 
-  useEffect(() => {
-    setIsLoaded(true)
+      // 2. Zoom de câmera lento
+      gsap.to(videoRef.current, {
+        scale: 1.08,
+        duration: 30,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut'
+      })
+
+      // 3. Revelação do Título
+      titleLinesRef.current.forEach((line, index) => {
+        if (!line) return
+        gsap.fromTo(line, 
+          { y: '120%', skewY: 7, opacity: 0 },
+          { 
+            y: 0, 
+            skewY: 0, 
+            opacity: 1, 
+            duration: 1.5, 
+            delay: 0.5 + (index * 0.2), 
+            ease: 'expo.out' 
+          }
+        )
+      })
+
+      // 4. Revelação do conteúdo
+      gsap.fromTo(contentRef.current, 
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1.5, delay: 1.2, ease: 'power2.out' }
+      )
+
+      // 5. Flutuação do ícone de scroll
+      gsap.to('.scroll-indicator', {
+        y: 10,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: 2.5
+      })
+    })
+
+    return () => ctx.revert()
   }, [])
 
   return (
-    <section ref={ref} className="relative h-[80vh] md:h-[85vh] lg:h-[90vh] w-full overflow-hidden">
-      {/* Video Background com Parallax */}
-      <motion.div 
-        style={{ y }} 
-        className="absolute inset-0 z-0 h-[105%] sm:h-[110%] md:h-[130%] -top-[2.5%] sm:-top-[5%] md:-top-[15%]"
-      >
+    <section 
+      ref={containerRef} 
+      className="relative h-screen w-full overflow-hidden opacity-0"
+    >
+      {/* Video Background (The Frame) */}
+      <div className="absolute inset-0 z-0">
         <video
           ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
-          className="absolute inset-0 w-full h-full object-cover cinematic-zoom"
-          style={{ willChange: 'transform' }}
+          className="absolute inset-0 w-full h-full object-cover"
           onLoadedData={() => setIsLoaded(true)}
         >
           <source src="/video_olhosdeboneca2.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-deep-black/70 via-deep-black/50 to-deep-black/80" />
-        <div className="absolute inset-0 bg-deep-black/40" />
-      </motion.div>
+        
+        {/* Cinematic Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-deep-night/60 via-transparent to-deep-night/80" />
+        <div className="absolute inset-0 bg-deep-night/20" />
+        
+        {/* Soft Breathing Glow */}
+        <div className="absolute top-[20%] left-[10%] w-[40vw] h-[40vw] bg-wine-cinema/10 blur-[150px] animate-pulse" />
+      </div>
 
-      {/* Content */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-6 text-center w-full">
-        <div className="space-y-4 md:space-y-6 w-full max-w-4xl mx-auto">
-          <h1 className="font-editorial text-4xl md:text-7xl lg:text-8xl font-light tracking-wide text-ice-white leading-tight">
-            <span className="block overflow-hidden pb-1 md:pb-2">
-              <motion.span
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: isLoaded ? 0 : "100%", opacity: isLoaded ? 1 : 0 }}
-                transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1], delay: 0.2 }}
+      {/* Content Container */}
+      <div className="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center">
+        <div className="max-w-5xl mx-auto">
+          {/* Headline Narrativa */}
+          <h1 className="font-editorial text-5xl md:text-8xl lg:text-9xl font-light tracking-tight text-ice-white leading-[0.9]">
+            <span className="block overflow-hidden py-4">
+              <span 
+                ref={el => { titleLinesRef.current[0] = el }}
                 className="block"
               >
                 Seu olhar é sua
-              </motion.span>
+              </span>
             </span>
-            <span className="block overflow-hidden pb-2 md:pb-4">
-              <motion.span
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: isLoaded ? 0 : "100%", opacity: isLoaded ? 1 : 0 }}
-                transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1], delay: 0.4 }}
+            <span className="block overflow-hidden py-4">
+              <span 
+                ref={el => { titleLinesRef.current[1] = el }}
                 className="block font-medium italic text-champagne"
               >
                 assinatura.
-              </motion.span>
+              </span>
             </span>
           </h1>
           
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-            transition={{ duration: 1.2, delay: 0.8 }}
-            className="font-body text-base md:text-xl text-nude-rose max-w-2xl mx-auto font-light tracking-wide px-2"
-          >
-            Extensão de cílios premium com sofisticação, técnica e identidade.
-          </motion.p>
+          <div ref={contentRef} className="mt-12 space-y-10">
+            <p className="font-body text-base md:text-lg text-ice-white/70 max-w-xl mx-auto font-light tracking-[0.2em] uppercase">
+              Extensão de cílios premium com identidade única.
+            </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-            transition={{ duration: 1.2, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-4 md:gap-6 w-full justify-center items-center pt-6 md:pt-8"
-          >
-            <MagneticButton className="w-full sm:w-auto flex justify-center">
-              <a href="#contact" className="premium-button text-xs md:text-sm px-6 md:px-8 py-3 md:py-4 w-[85%] sm:w-auto text-center">
-                Agendar Horário
-              </a>
-            </MagneticButton>
-            <MagneticButton className="w-full sm:w-auto flex justify-center">
-              <a href="#academy" className="outline-button text-xs md:text-sm px-6 md:px-8 py-3 md:py-4 w-[85%] sm:w-auto text-center">
-                Conhecer Academy
-              </a>
-            </MagneticButton>
-          </motion.div>
+            <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
+              <MagneticButton>
+                <a href="#contact" className="premium-button">
+                  Agendar Experiência
+                </a>
+              </MagneticButton>
+              <MagneticButton>
+                <a href="#academy" className="outline-button">
+                  Olhos de Boneca Academy
+                </a>
+              </MagneticButton>
+            </div>
+          </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isLoaded ? 1 : 0 }}
-          transition={{ duration: 1, delay: 1.5 }}
-          className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2"
-        >
-          <div className="scroll-indicator flex flex-col items-center gap-2">
-            <span className="text-champagne/60 text-[10px] md:text-xs uppercase tracking-widest">Scroll</span>
-            <div className="w-px h-10 md:h-16 bg-gradient-to-b from-champagne/60 to-transparent" />
+        {/* Scroll Indicator Flutuante */}
+        <div className="scroll-indicator absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
+          <span className="text-ice-white/30 text-[9px] uppercase tracking-[0.4em] font-light">Scroll</span>
+          <div className="relative flex flex-col items-center">
+            <div className="w-px h-10 bg-gradient-to-b from-champagne/40 to-transparent" />
+            <div className="w-1.5 h-1.5 rounded-full bg-champagne/50 mt-1 shadow-[0_0_8px_rgba(214,180,124,0.5)]" />
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-champagne/30 to-transparent" />
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-champagne/30 to-transparent" />
+      {/* Frame Borders (Subtle Luxury) */}
+      <div className="absolute top-0 left-0 w-full h-[10vh] bg-gradient-to-b from-deep-night to-transparent opacity-60" />
+      <div className="absolute bottom-0 left-0 w-full h-[15vh] bg-gradient-to-t from-deep-night to-transparent opacity-80" />
     </section>
   )
 }

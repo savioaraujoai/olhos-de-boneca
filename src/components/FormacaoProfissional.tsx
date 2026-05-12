@@ -1,123 +1,144 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MagneticButton from "./MagneticButton";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const slides = [
   {
     image: "/angelica_curso_1.png",
     title: "Autoridade",
-    subtitle: "Instrutora referência no mercado",
+    subtitle: "Referência no Mercado",
     desc: "Angélica compartilha anos de experiência em cada detalhe do ensino.",
   },
   {
     image: "/angelica_curso_2.png",
     title: "Imersão",
-    subtitle: "Sala cheia de energia",
+    subtitle: "Energia Coletiva",
     desc: "Turmas limitadas para garantir atenção individualizada e foco total.",
   },
   {
     image: "/angelica_curso_3.png",
-    title: "Proximidade",
-    subtitle: "Conexão com as alunas",
-    desc: "Acompanhamento próximo do primeiro fio até a certificação.",
+    title: "Técnica",
+    subtitle: "Precisão Absoluta",
+    desc: "O domínio dos fios sob uma perspectiva de arte e arquitetura facial.",
+  },
+  {
+    image: "/foto_curso_5.png",
+    title: "Legado",
+    subtitle: "Sua Nova Jornada",
+    desc: "Mais que um curso, o início de uma carreira de alto padrão no luxo.",
   },
 ];
 
 export default function FormacaoProfissional() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const pin = gsap.fromTo(
+        sectionRef.current,
+        { translateX: 0 },
+        {
+          translateX: "-300vw",
+          ease: "none",
+          duration: 1,
+          scrollTrigger: {
+            trigger: triggerRef.current,
+            start: "top top",
+            end: "2000 top",
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+          },
+        }
+      );
+      return () => pin.kill();
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="academy" className="relative bg-deep-black pt-32 pb-40">
-      {/* Título (Scrolla normalmente com a página) */}
-      <div className="text-center mb-24">
-        <h2 className="font-editorial text-5xl md:text-7xl font-light text-champagne mb-2">
-          Olhos de Boneca Academy
-        </h2>
-        <p className="font-body text-ice-white/70 tracking-widest uppercase text-xs md:text-sm">
-          Aperfeiçoamento e Formação Profissional
-        </p>
-      </div>
+    <div className="overflow-hidden">
+      <div ref={triggerRef}>
+        <section 
+          ref={sectionRef} 
+          className="relative h-screen w-[400vw] flex flex-nowrap items-center bg-deep-night"
+        >
+          {/* Background Text (Subtle Luxury) */}
+          <div className="absolute top-1/2 left-10 -translate-y-1/2 pointer-events-none">
+            <h2 className="font-editorial text-[20vw] text-white/[0.02] leading-none select-none">
+              ACADEMY
+            </h2>
+          </div>
 
-      {/* Container das Imagens (Scroll Vertical Normal) */}
-      <div className="relative z-10 flex flex-col gap-32 w-full max-w-7xl mx-auto px-6 md:px-12">
-        {slides.map((slide, index) => (
-          <Slide key={index} slide={slide} index={index} total={slides.length} />
-        ))}
-      </div>
-    </section>
-  );
-}
+          {slides.map((slide, index) => (
+            <div 
+              key={index} 
+              className="relative w-screen h-full flex flex-col md:flex-row items-center justify-center gap-12 px-10 md:px-24"
+            >
+              {/* Image Container (Editorial Style) */}
+              <div className="relative w-full md:w-[45%] h-[50vh] md:h-[70vh] group">
+                {/* Frame Decorativo Duplo */}
+                <div className="absolute -inset-3 border border-champagne/30 pointer-events-none transition-all duration-700 group-hover:border-champagne/60 z-10" />
+                <div className="absolute -inset-6 border border-champagne/10 pointer-events-none z-10" />
+                
+                <div className="relative w-full h-full overflow-hidden bg-black/40">
+                  <Image
+                    src={slide.image}
+                    alt={slide.title}
+                    fill
+                    className="object-cover transition-transform duration-[2000ms] ease-out group-hover:scale-110"
+                    sizes="50vw"
+                    loading="eager"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-deep-night/60 to-transparent" />
+                  
+                  {/* Numbering */}
+                  <div className="absolute top-8 left-8">
+                    <span className="font-body text-xs tracking-[0.5em] text-champagne/80">
+                      {`0${index + 1}`}
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-function Slide({ slide, index, total }: { slide: any; index: number; total: number }) {
-  const ref = useRef(null);
+              {/* Text Content */}
+              <div className="w-full md:w-[40%] flex flex-col">
+                <h3 className="font-editorial text-5xl md:text-8xl text-ice-white font-light mb-6">
+                  {slide.title}
+                </h3>
+                <p className="font-body text-lg md:text-xl text-champagne/80 mb-8 tracking-widest uppercase">
+                  {slide.subtitle}
+                </p>
+                <p className="font-body text-base md:text-lg text-ice-white/50 leading-relaxed max-w-md">
+                  {slide.desc}
+                </p>
 
-  // Alterna o layout (imagem na esquerda ou direita) para dar mais dinamismo
-  const isEven = index % 2 === 0;
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} items-center justify-center gap-10 md:gap-20 w-full`}
-    >
-      {/* Imagem com Moldura Elegante */}
-      <div className="relative w-full md:w-1/2 h-[40vh] md:h-[65vh] p-4 md:p-6 bg-deep-black/40 backdrop-blur-sm border border-champagne/10 shadow-2xl group flex items-center justify-center">
-        {/* Detalhes Dourados nos Cantos (Cantoneiras Clássicas) */}
-        <div className="absolute top-0 left-0 w-8 md:w-12 h-8 md:h-12 border-t-[1.5px] border-l-[1.5px] border-champagne transition-all duration-500 group-hover:scale-110 origin-top-left" />
-        <div className="absolute top-0 right-0 w-8 md:w-12 h-8 md:h-12 border-t-[1.5px] border-r-[1.5px] border-champagne transition-all duration-500 group-hover:scale-110 origin-top-right" />
-        <div className="absolute bottom-0 left-0 w-8 md:w-12 h-8 md:h-12 border-b-[1.5px] border-l-[1.5px] border-champagne transition-all duration-500 group-hover:scale-110 origin-bottom-left" />
-        <div className="absolute bottom-0 right-0 w-8 md:w-12 h-8 md:h-12 border-b-[1.5px] border-r-[1.5px] border-champagne transition-all duration-500 group-hover:scale-110 origin-bottom-right" />
-
-        {/* Linha Fina Interna */}
-        <div className="absolute inset-2 md:inset-3 border border-champagne/5 pointer-events-none" />
-
-        <div className="relative w-full h-full overflow-hidden bg-black/20">
-          <Image
-            src={slide.image}
-            alt={slide.title}
-            fill
-            className="object-contain transition-transform duration-700 group-hover:scale-[1.02]"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority={index === 0}
-          />
-        </div>
-      </div>
-
-      {/* Conteúdo (Texto) */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center">
-        <div className="max-w-lg">
-          <span className="inline-block font-body text-sm tracking-[0.3em] text-champagne/70 uppercase mb-4">
-            {`0${index + 1}`}
-          </span>
-          <h3 className="font-editorial text-4xl md:text-6xl text-ice-white font-light mb-4">
-            {slide.title}
-          </h3>
-          <p className="font-body text-xl md:text-2xl text-champagne/90 mb-6">
-            {slide.subtitle}
-          </p>
-          <p className="font-body text-base md:text-lg text-ice-white/70 leading-relaxed">
-            {slide.desc}
-          </p>
-          {index === total - 1 && (
-            <div className="flex justify-center md:justify-end mt-12 md:mt-24 w-full">
-              <MagneticButton className="w-full sm:w-auto flex justify-center">
-                <a
-                  href="https://wa.me/5541999999999"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="premium-button text-base px-12 py-5 tracking-[0.2em] w-[85%] sm:w-auto text-center"
-                >
-                  Quero me formar
-                </a>
-              </MagneticButton>
+                {index === slides.length - 1 && (
+                  <div className="mt-12">
+                    <MagneticButton>
+                      <a
+                        href="#contact"
+                        className="premium-button"
+                      >
+                        Fazer Parte da Academy
+                      </a>
+                    </MagneticButton>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </div>
+          ))}
+        </section>
       </div>
-    </motion.div>
+    </div>
   );
 }
+

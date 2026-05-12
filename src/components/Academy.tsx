@@ -15,7 +15,7 @@ export default function Academy() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="academy" className="py-32 bg-deep-black relative overflow-hidden">
+    <section id="academy" className="py-16 md:py-24 relative overflow-hidden">
       {/* Background Academy Reference Image */}
       <div className="absolute inset-0 opacity-5">
         <div

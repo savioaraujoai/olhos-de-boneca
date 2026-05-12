@@ -35,7 +35,7 @@ export default function Testimonials() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="depoimentos" className="pt-32 pb-16 bg-gradient-to-b from-deep-black to-deep-black/95 overflow-hidden">
+    <section id="depoimentos" className="py-16 md:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           ref={ref}

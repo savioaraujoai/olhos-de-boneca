@@ -9,12 +9,9 @@ export default function FinalCTA() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section className="relative pt-16 pb-32 md:pb-48 overflow-hidden">
-      {/* Background with subtle animation */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-deep-black via-deep-black/95 to-deep-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-champagne/5 via-transparent to-transparent" />
-      </div>
+    <section className="relative py-16 md:py-24 overflow-hidden">
+      {/* Radial glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-champagne/5 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
         <motion.div

@@ -1,49 +1,73 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { gsap } from 'gsap'
 
 export default function Preloader() {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isVisible, setIsVisible] = useState(true)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const textRef = useRef<HTMLHeadingElement>(null)
+  const lineRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Simula o tempo de carregamento dos recursos iniciais (imagens e vídeos)
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+    // Bloqueia scroll enquanto o preloader está ativo
+    document.body.style.overflow = 'hidden'
 
-    return () => clearTimeout(timer)
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          setIsVisible(false)
+          document.body.style.overflow = ''
+        }
+      })
+
+      // Entrada rápida e elegante
+      tl.fromTo(textRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'expo.out' }
+      )
+      .fromTo(lineRef.current,
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.6, ease: 'power2.inOut' },
+        '-=0.3'
+      )
+      // Pausa breve antes de sumir
+      .to({}, { duration: 0.4 })
+      // Saída rápida e completa
+      .to(containerRef.current, {
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power2.inOut'
+      })
+    })
+
+    return () => {
+      ctx.revert()
+      document.body.style.overflow = ''
+    }
   }, [])
 
+  if (!isVisible) return null
+
   return (
-    <AnimatePresence>
-      {isLoading && (
-        <motion.div
-          key="preloader"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1, ease: [0.77, 0, 0.175, 1] }}
-          className="fixed inset-0 z-[100] bg-deep-black flex flex-col items-center justify-center"
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-[200] bg-deep-night flex flex-col items-center justify-center"
+    >
+      <div className="overflow-hidden mb-5">
+        <h1
+          ref={textRef}
+          className="font-editorial text-4xl md:text-6xl text-ice-white tracking-widest uppercase font-light"
         >
-          <div className="overflow-hidden mb-4">
-            <motion.h1
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{ duration: 1, ease: [0.77, 0, 0.175, 1], delay: 0.2 }}
-              className="font-editorial text-5xl md:text-7xl text-ice-white"
-            >
-              Olhos de <span className="italic text-champagne">Boneca</span>
-            </motion.h1>
-          </div>
-          
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="w-48 h-px bg-gradient-to-r from-transparent via-champagne/50 to-transparent origin-center"
-          />
-        </motion.div>
-      )}
-    </AnimatePresence>
+          Olhos de <span className="italic text-champagne lowercase">Boneca</span>
+        </h1>
+      </div>
+
+      <div
+        ref={lineRef}
+        className="w-24 h-px bg-gradient-to-r from-transparent via-champagne/40 to-transparent origin-center"
+      />
+    </div>
   )
 }
+

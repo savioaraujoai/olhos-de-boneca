@@ -6,44 +6,62 @@
 
 @layer base {
   body {
-    @apply bg-deep-black text-ice-white font-body overflow-x-hidden;
+    @apply bg-deep-night text-ice-white font-body overflow-x-hidden selection:bg-champagne/30;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    @apply selection:bg-champagne/30;
   }
 
-  /* Otimização de performance: habilita aceleração por hardware */
+  /* Cinematic Grain Overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* Hardware Acceleration and Layering */
   *, *::before, *::after {
     -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 
-  /* Força a remoção do cursor padrão em telas de computador/mouse */
+  /* Cursor reset */
   @media (pointer: fine) {
     *, a, button {
       cursor: none !important;
     }
   }
-
-  /* Restaura cursor padrão em dispositivos touch */
-  @media (pointer: coarse) {
-    *, a, button {
-      cursor: auto !important;
-    }
-  }
 }
 
 @layer components {
+  .section-breathing {
+    @apply py-16 md:py-24;
+  }
+
+  .visual-silence {
+    @apply bg-deep-night text-ice-white flex flex-col items-center justify-center text-center px-6;
+  }
+
   .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    @apply bg-white/[0.02] backdrop-blur-xl border border-white/[0.05];
+    will-change: transform, backdrop-filter;
   }
   
   .premium-button {
-    @apply relative overflow-hidden rounded-full px-8 py-4 bg-champagne text-deep-black font-semibold tracking-widest uppercase text-sm transition-all duration-500 z-10 shadow-lg shadow-champagne/10 flex items-center justify-center;
+    @apply relative overflow-hidden rounded-full px-10 py-5 bg-champagne text-deep-black font-medium tracking-widest uppercase text-[10px] md:text-xs transition-all duration-700 z-10 shadow-2xl shadow-champagne/5 flex items-center justify-center;
   }
 
   .premium-button::before {
     content: '';
-    @apply absolute inset-0 bg-ice-white/20 -z-10 origin-left scale-x-0 transition-transform duration-500 ease-[cubic-bezier(0.77,0,0.175,1)] rounded-full;
+    @apply absolute inset-0 bg-white -z-10 origin-left scale-x-0 transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] rounded-full;
   }
 
   .premium-button:hover::before {
@@ -51,20 +69,20 @@
   }
 
   .premium-button:hover {
-    @apply shadow-[0_0_30px_rgba(238,203,169,0.3)];
+    @apply text-deep-black shadow-champagne/20 scale-[1.02];
   }
   
   .outline-button {
-    @apply relative overflow-hidden rounded-full px-8 py-4 border border-champagne text-champagne font-semibold tracking-widest uppercase text-sm transition-all duration-500 z-10 flex items-center justify-center;
+    @apply relative overflow-hidden rounded-full px-10 py-5 border border-white/20 text-white font-medium tracking-widest uppercase text-[10px] md:text-xs transition-all duration-700 z-10 flex items-center justify-center;
   }
 
   .outline-button::before {
     content: '';
-    @apply absolute inset-0 bg-champagne -z-10 origin-bottom scale-y-0 transition-transform duration-500 ease-[cubic-bezier(0.77,0,0.175,1)] rounded-full;
+    @apply absolute inset-0 bg-white -z-10 origin-bottom scale-y-0 transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] rounded-full;
   }
 
   .outline-button:hover {
-    @apply text-deep-black border-transparent;
+    @apply text-deep-black border-transparent scale-[1.02];
   }
 
   .outline-button:hover::before {
@@ -72,66 +90,31 @@
   }
 }
 
-@keyframes cinematic-zoom {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.1); }
+/* Cinematic Transitions */
+.blur-in {
+  filter: blur(20px);
+  opacity: 0;
+  transition: filter 2s cubic-bezier(0.19, 1, 0.22, 1), opacity 2s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-@keyframes scroll-indicator {
-  0%, 100% { transform: translateY(0); opacity: 1; }
-  50% { transform: translateY(10px); opacity: 0.5; }
+.blur-in.is-visible {
+  filter: blur(0);
+  opacity: 1;
 }
 
-@keyframes fade-up {
-  0% { opacity: 0; transform: translateY(40px); }
-  100% { opacity: 1; transform: translateY(0); }
+/* Horizontal Scroll Container */
+.horizontal-scroll-section {
+  @apply overflow-hidden flex flex-nowrap;
 }
 
-@keyframes blur-reveal {
-  0% { opacity: 0; filter: blur(20px); }
-  100% { opacity: 1; filter: blur(0); }
+.horizontal-card {
+  @apply flex-shrink-0 w-[85vw] md:w-[45vw] lg:w-[35vw] h-[60vh] md:h-[70vh] mr-8 last:mr-0;
 }
 
-.cinematic-zoom {
-  animation: cinematic-zoom 20s ease-out forwards;
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-.scroll-indicator {
-  animation: scroll-indicator 2s ease-in-out infinite;
-}
-
-.fade-up {
-  animation: fade-up 1s ease-out forwards;
-}
-
-.blur-reveal {
-  animation: blur-reveal 1.5s ease-out forwards;
-}
-
-/* Otimizações mobile: reduz animações pesadas */
+/* Mobile Optimizations */
 @media (max-width: 767px) {
-  .cinematic-zoom {
-    animation: cinematic-zoom 30s ease-out forwards;
-  }
-
-  /* Reduz motion para quem prefere acessibilidade */
-  @media (prefers-reduced-motion: reduce) {
-    .cinematic-zoom,
-    .scroll-indicator,
-    .fade-up,
-    .blur-reveal {
-      animation: none;
-    }
+  .section-breathing {
+    @apply py-12;
   }
 }
 
-/* Otimização global: respeita preferência de redução de movimento */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}

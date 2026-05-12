@@ -1,100 +1,74 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [isHovering, setIsHovering] = useState(false)
-  const [isTouchDevice, setIsTouchDevice] = useState(false)
-  const rafRef = useRef<number | null>(null)
-  const positionRef = useRef({ x: 0, y: 0 })
+  const dotRef = useRef<HTMLDivElement>(null)
+  const glowRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Detecta se é dispositivo touch — se for, não renderiza o cursor customizado
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-    setIsTouchDevice(isTouch)
     if (isTouch) return
 
-    const updateMousePosition = (e: MouseEvent) => {
-      positionRef.current = { x: e.clientX, y: e.clientY }
-      
-      // Usa requestAnimationFrame para limitar updates e melhorar performance
-      if (rafRef.current === null) {
-        rafRef.current = requestAnimationFrame(() => {
-          setMousePosition({ ...positionRef.current })
-          rafRef.current = null
-        })
-      }
+    const dot = dotRef.current
+    const glow = glowRef.current
+
+    if (!dot || !glow) return
+
+    const onMouseMove = (e: MouseEvent) => {
+      // Suavidade extrema no ponto central
+      gsap.to(dot, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.1,
+        ease: 'power2.out'
+      })
+
+      // Brilho segue com um leve atraso (lag suave)
+      gsap.to(glow, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.5,
+        ease: 'power3.out'
+      })
     }
 
-    const handleMouseOver = (e: MouseEvent) => {
+    const onMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement
-      // Verifica se está passando por cima de um botão, link ou elemento clicável
-      if (
-        target.tagName.toLowerCase() === 'button' ||
-        target.tagName.toLowerCase() === 'a' ||
-        target.closest('button') ||
-        target.closest('a') ||
-        target.classList.contains('cursor-pointer') ||
-        target.classList.contains('hover-target')
-      ) {
-        setIsHovering(true)
+      const isInteractive = target.closest('button') || target.closest('a') || target.classList.contains('cursor-pointer')
+
+      if (isInteractive) {
+        gsap.to(dot, { scale: 3, opacity: 0.5, duration: 0.3 })
+        gsap.to(glow, { scale: 2, opacity: 0.2, duration: 0.3 })
       } else {
-        setIsHovering(false)
+        gsap.to(dot, { scale: 1, opacity: 1, duration: 0.3 })
+        gsap.to(glow, { scale: 1, opacity: 0.1, duration: 0.3 })
       }
     }
 
-    window.addEventListener('mousemove', updateMousePosition, { passive: true })
-    window.addEventListener('mouseover', handleMouseOver, { passive: true })
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseover', onMouseOver)
 
     return () => {
-      window.removeEventListener('mousemove', updateMousePosition)
-      window.removeEventListener('mouseover', handleMouseOver)
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current)
-      }
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseover', onMouseOver)
     }
   }, [])
 
-  // Desativa o cursor padrão apenas em desktop
-  useEffect(() => {
-    if (isTouchDevice) return
-    document.body.style.cursor = 'none'
-    return () => {
-      document.body.style.cursor = 'auto'
-    }
-  }, [isTouchDevice])
-
-  // Não renderiza nada em dispositivos touch
-  if (isTouchDevice) return null
-
   return (
-    <>
-      {/* Ponto central pequeno */}
-      <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-champagne rounded-full pointer-events-none z-[9999] hidden md:block"
-        style={{ willChange: 'transform' }}
-        animate={{
-          x: mousePosition.x - 6,
-          y: mousePosition.y - 6,
-          scale: isHovering ? 0 : 1,
-        }}
-        transition={{ type: 'tween', ease: 'backOut', duration: 0.1 }}
+    <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
+      {/* Glow Sutil (Aura) */}
+      <div 
+        ref={glowRef}
+        className="absolute top-0 left-0 w-20 h-20 -mt-10 -ml-10 bg-champagne/10 rounded-full blur-xl mix-blend-screen will-change-transform"
       />
       
-      {/* Círculo externo que segue mais suavemente */}
-      <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border border-champagne rounded-full pointer-events-none z-[9998] hidden md:flex items-center justify-center"
-        style={{ willChange: 'transform' }}
-        animate={{
-          x: mousePosition.x - 20,
-          y: mousePosition.y - 20,
-          scale: isHovering ? 1.5 : 1,
-          backgroundColor: isHovering ? 'rgba(238, 203, 169, 0.2)' : 'rgba(238, 203, 169, 0)',
-        }}
-        transition={{ type: 'tween', ease: 'easeOut', duration: 0.2 }}
+      {/* Ponto Central — Tamanho aumentado */}
+      <div 
+        ref={dotRef}
+        className="absolute top-0 left-0 w-2.5 h-2.5 -mt-[5px] -ml-[5px] bg-champagne rounded-full shadow-[0_0_14px_rgba(214,180,124,0.7)] will-change-transform"
       />
-    </>
+    </div>
   )
 }

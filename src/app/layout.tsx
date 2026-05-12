@@ -5,6 +5,7 @@ import CustomCursor from '@/components/CustomCursor'
 import Header from '@/components/Header'
 import Preloader from '@/components/Preloader'
 import WhatsAppButton from '@/components/WhatsAppButton'
+import DynamicBackground from '@/components/DynamicBackground'
 
 export const metadata: Metadata = {
   title: 'Olhos de Boneca Curitiba | Extensão de Cílios Premium',
@@ -23,12 +24,15 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="antialiased">
+        <DynamicBackground />
         <Preloader />
         <CustomCursor />
         <Header />
         <WhatsAppButton />
         <SmoothScroll>
-          {children}
+          <main>
+            {children}
+          </main>
         </SmoothScroll>
       </body>
     </html>
