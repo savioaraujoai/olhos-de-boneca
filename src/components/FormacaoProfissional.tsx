@@ -103,13 +103,13 @@ function Slide({ slide, index, total }: { slide: any; index: number; total: numb
             {slide.desc}
           </p>
           {index === total - 1 && (
-            <div className="flex justify-end mt-24">
-              <MagneticButton>
+            <div className="flex justify-center md:justify-end mt-12 md:mt-24 w-full">
+              <MagneticButton className="w-full sm:w-auto flex justify-center">
                 <a
                   href="https://wa.me/5541999999999"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="premium-button text-base px-12 py-5 tracking-[0.2em] w-full sm:w-auto"
+                  className="premium-button text-base px-12 py-5 tracking-[0.2em] w-[85%] sm:w-auto text-center"
                 >
                   Quero me formar
                 </a>

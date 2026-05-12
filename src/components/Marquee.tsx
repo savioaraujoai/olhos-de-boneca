@@ -17,15 +17,17 @@ export default function Marquee() {
   )
 
   return (
-    <div className="w-full bg-champagne py-5 overflow-hidden flex whitespace-nowrap relative z-20 border-y border-white/20 shadow-2xl" style={{ transform: 'rotate(-2deg) scale(1.05)' }}>
-      <motion.div
-        animate={{ x: [0, "-50%"] }}
-        transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-        className="flex"
-      >
-        <div className="flex">{[...Array(4)].map((_, i) => <div key={`a-${i}`}>{content}</div>)}</div>
-        <div className="flex">{[...Array(4)].map((_, i) => <div key={`b-${i}`}>{content}</div>)}</div>
-      </motion.div>
+    <div className="relative w-full z-20 -mt-8 sm:-mt-12 md:-mt-16">
+      <div className="w-full bg-champagne py-4 md:py-5 overflow-hidden flex whitespace-nowrap border-y border-white/20 shadow-2xl" style={{ transform: 'rotate(-2deg) scale(1.05)' }}>
+        <motion.div
+          animate={{ x: [0, "-50%"] }}
+          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+          className="flex"
+        >
+          <div className="flex">{[...Array(4)].map((_, i) => <div key={`a-${i}`}>{content}</div>)}</div>
+          <div className="flex">{[...Array(4)].map((_, i) => <div key={`b-${i}`}>{content}</div>)}</div>
+        </motion.div>
+      </div>
     </div>
   )
 }
