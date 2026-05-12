@@ -27,6 +27,7 @@ const sections = [
   }
 ]
 
+export default function ScrollStorytelling() {
   return (
     <section className="relative py-16 md:py-32 bg-deep-black overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
