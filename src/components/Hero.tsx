@@ -54,7 +54,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={ref} className="relative h-[85vh] md:h-[90vh] lg:h-[95vh] w-full overflow-hidden">
+    <section ref={ref} className="relative h-[80vh] md:h-[85vh] lg:h-[90vh] w-full overflow-hidden">
       {/* Video Background com Parallax */}
       <motion.div 
         style={{ y }} 
