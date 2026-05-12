@@ -54,7 +54,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={ref} className="relative h-[65vh] sm:h-[75vh] md:h-screen w-full overflow-hidden">
+    <section ref={ref} className="relative h-[100dvh] md:h-screen w-full overflow-hidden">
       {/* Video Background com Parallax */}
       <motion.div 
         style={{ y }} 
@@ -78,8 +78,8 @@ export default function Hero() {
       </motion.div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-6 text-center">
-        <div className="space-y-4 md:space-y-6">
+      <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-6 text-center w-full">
+        <div className="space-y-4 md:space-y-6 w-full max-w-4xl mx-auto">
           <h1 className="font-editorial text-4xl md:text-7xl lg:text-8xl font-light tracking-wide text-ice-white leading-tight">
             <span className="block overflow-hidden pb-1 md:pb-2">
               <motion.span
@@ -116,15 +116,15 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
             transition={{ duration: 1.2, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center pt-6 md:pt-8"
+            className="flex flex-col sm:flex-row gap-4 md:gap-6 w-full justify-center items-center pt-6 md:pt-8"
           >
-            <MagneticButton>
-              <a href="#contact" className="premium-button text-xs md:text-sm px-6 md:px-8 py-3 md:py-4">
+            <MagneticButton className="w-full sm:w-auto flex justify-center">
+              <a href="#contact" className="premium-button text-xs md:text-sm px-6 md:px-8 py-3 md:py-4 w-[85%] sm:w-auto text-center">
                 Agendar Horário
               </a>
             </MagneticButton>
-            <MagneticButton>
-              <a href="#academy" className="outline-button text-xs md:text-sm px-6 md:px-8 py-3 md:py-4">
+            <MagneticButton className="w-full sm:w-auto flex justify-center">
+              <a href="#academy" className="outline-button text-xs md:text-sm px-6 md:px-8 py-3 md:py-4 w-[85%] sm:w-auto text-center">
                 Conhecer Academy
               </a>
             </MagneticButton>

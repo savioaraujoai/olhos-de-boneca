@@ -35,14 +35,14 @@ export default function Services() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section id="servicos" className="py-32 bg-gradient-to-b from-deep-black to-deep-black/95 overflow-hidden">
+    <section id="servicos" className="py-16 md:py-32 bg-gradient-to-b from-deep-black to-deep-black/95 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1 }}
-          className="text-center mb-20"
+          className="text-center mb-12 md:mb-20"
         >
           <span className="text-champagne/60 text-sm uppercase tracking-widest font-body block mb-4">
             Serviços Premium

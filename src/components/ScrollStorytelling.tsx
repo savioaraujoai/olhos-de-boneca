@@ -27,9 +27,8 @@ const sections = [
   }
 ]
 
-export default function ScrollStorytelling() {
   return (
-    <section className="relative py-32 md:py-48 bg-deep-black overflow-hidden">
+    <section className="relative py-16 md:py-32 bg-deep-black overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         {sections.map((section, index) => (
           <ScrollSection key={section.id} section={section} index={index} />
@@ -61,7 +60,7 @@ function ScrollSection({ section, index }: { section: any; index: number }) {
       initial={{ opacity: 0, y: 80, filter: "blur(20px)" }}
       animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
       transition={{ duration: 1.2, ease: "easeOut" }}
-      className={`mb-48 last:mb-0 ${index % 2 === 0 ? 'text-left' : 'text-right'}`}
+      className={`mb-24 md:mb-48 last:mb-0 ${index % 2 === 0 ? 'text-left' : 'text-right'}`}
     >
       <div className={`max-w-3xl ${index % 2 !== 0 ? 'ml-auto' : ''}`}>
         <div className="flex items-center gap-4 mb-6">
