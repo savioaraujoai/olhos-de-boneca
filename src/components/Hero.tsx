@@ -54,11 +54,11 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={ref} className="relative h-[85vh] md:h-screen w-full overflow-hidden">
+    <section ref={ref} className="relative h-[65vh] sm:h-[75vh] md:h-screen w-full overflow-hidden">
       {/* Video Background com Parallax */}
       <motion.div 
         style={{ y }} 
-        className="absolute inset-0 z-0 h-[115%] md:h-[130%] -top-[7%] md:-top-[15%]"
+        className="absolute inset-0 z-0 h-[105%] sm:h-[110%] md:h-[130%] -top-[2.5%] sm:-top-[5%] md:-top-[15%]"
       >
         <video
           ref={videoRef}

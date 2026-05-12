@@ -8,6 +8,7 @@ import FormacaoProfissional from '@/components/FormacaoProfissional'
 import Certificacoes from '@/components/Certificacoes'
 import Testimonials from '@/components/Testimonials'
 import FinalCTA from '@/components/FinalCTA'
+import LocationMap from '@/components/LocationMap'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
       <Certificacoes />
       <Testimonials />
       <FinalCTA />
+      <LocationMap />
       <Footer />
     </main>
   )
